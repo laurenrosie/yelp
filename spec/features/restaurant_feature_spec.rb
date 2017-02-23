@@ -1,6 +1,49 @@
 require 'rails_helper'
 
 feature 'restaurants' do
+
+  context 'user has not logged in' do
+
+    before do
+      Restaurant.create name: 'KFC', description: 'Deep fried goodness', id: 1
+    end
+
+    scenario 'user cannot add restaurant' do
+      visit '/'
+      click_link 'Add a restaurant'
+      expect(page).to have_content 'Log in'
+      expect(page).to have_content 'Email'
+      expect(page).to have_content 'Password'
+    end
+
+    scenario 'user cannot edit a restaurant' do
+      visit '/'
+      click_link 'Edit KFC'
+      expect(page).to have_content 'Log in'
+      expect(page).to have_content 'Email'
+      expect(page).to have_content 'Password'
+    end
+
+    scenario 'user cannot delete a restaurant' do
+      visit '/'
+      click_link 'Delete KFC'
+      expect(page).to have_content 'Log in'
+      expect(page).to have_content 'Email'
+      expect(page).to have_content 'Password'
+    end
+  end
+
+  context 'user has logged in or just signed up' do
+
+    before do
+      visit('/')
+      click_link('Sign up')
+      fill_in('Email', with: 'test@example.com')
+      fill_in('Password', with: 'testtest')
+      fill_in('Password confirmation', with: 'testtest')
+      click_button('Sign up')
+    end
+
  context 'no restaurants have been added' do
    scenario 'should display a prompt to add a restaurant' do
      visit '/restaurants'
@@ -85,5 +128,6 @@ feature 'restaurants' do
     expect(page).to have_content 'Restaurant deleted successfully'
   end
 
+end
 end
 end
