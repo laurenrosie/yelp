@@ -1,6 +1,18 @@
 class RestaurantsController < ApplicationController
 
   before_action :authenticate_user!, :except => [:index, :show]
+  before_action :restaurant_owner, :except => [:index, :show, :new, :create]
+
+  def restaurant_owner
+    @restaurant = Restaurant.find(params[:id])
+    puts @restaurant.inspect
+    puts current_user.inspect
+    @user = User.find(@restaurant.user_id)
+    unless @user.id == current_user.id
+     flash[:notice] = 'Access denied as you are not the owner of this Restaurant'
+     redirect_to restaurants_path
+    end
+  end
 
   def index
     @restaurants = Restaurant.all
@@ -14,6 +26,7 @@ class RestaurantsController < ApplicationController
   def create
     @restaurant = Restaurant.new(restaurant_params)
     @restaurant.user = current_user
+    @restaurant.user_id = current_user.id
   if @restaurant.save
     redirect_to restaurants_path
   else
