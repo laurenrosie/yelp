@@ -1,5 +1,11 @@
 require 'rails_helper'
 
+describe User do
+  it 'has many  restaurants' do
+    should have_many(:restaurants)
+  end
+end
+
 feature "User can sign in and out" do
   context "user not signed in and on the homepage" do
     it "should see a 'sign in' link and a 'sign up' link" do
