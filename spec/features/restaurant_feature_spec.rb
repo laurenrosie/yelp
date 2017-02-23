@@ -5,7 +5,7 @@ feature 'restaurants' do
   context 'user has not logged in' do
 
     before do
-      Restaurant.create name: 'KFC', description: 'Deep fried goodness', id: 1
+      Restaurant.create(name: 'KFC')
     end
 
     scenario 'user cannot add restaurant' do
